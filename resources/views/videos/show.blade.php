@@ -6,8 +6,6 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
-<a href="{{route('videos.create')}}" class="btn btn-primary">Add Video</a>
-{{$videos->links()}}
 <table class="table table-striped">
     <thead>
         <th>Id</th>
@@ -18,7 +16,6 @@
         <th>Actions</th>
     </thead>
     <tbody>
-        @foreach($videos as $video)
         <tr>
             <td>{{$video->id}}</td>
             <td>{{$video->title}}</td>
@@ -27,24 +24,14 @@
             <td>{{$video->updated_at}}</td>
             <td>
                 <div class="btn-group">
-                    <a href="{{route('videos.show', ['video' => $video])}}" class="btn btn-primary">View</a>
                     <a href="{{route('videos.edit', ['video' => $video])}}" class="btn btn-warning">Edit</a>
                     <a href="{{route('videos.destroy', ['video' => $video])}}" class="btn btn-danger">Delete</a>
                 </div>
             </td>
         </tr>
-        @endforeach
+        <a href="{{route('videos.index', ['video' => $video])}}" class="btn btn-primary">Back</a>
     </tbody>
-    <tfoot>
-        <th>Id</th>
-        <th>Title</th>
-        <th>Duration</th>
-        <th>Created At</th>
-        <th>Updated At</th>
-        <th>Actions</th>
-    </tfoot>
 </table>
-{{$videos->links()}}
 @endsection
 
 @push('scripts')

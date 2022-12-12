@@ -41,12 +41,12 @@ class VideoController extends Controller
     public function store(StoreVideoRequest $request)
     {
 
-//        $video = new Video();
-//        $video->title = $request->validated('title');
-//        $video->description = $request->validated('description');
-//        $video->duration = $request->validated('duration');
-//        $video->path = $request->validated('path');
-//        $video->thumbnail = $request->validated('thumbnail');
+        //        $video = new Video();
+        //        $video->title = $request->validated('title');
+        //        $video->description = $request->validated('description');
+        //        $video->duration = $request->validated('duration');
+        //        $video->path = $request->validated('path');
+        //        $video->thumbnail = $request->validated('thumbnail');
         $video = new Video($request->validated());
         $video->user()->associate(Auth::user());
         $video->save();
@@ -62,7 +62,10 @@ class VideoController extends Controller
      */
     public function show(Video $video)
     {
-        //
+        if ($video->user->id !== Auth::user()->id) {
+            throw new NotFoundHttpException();
+        }
+        return view('videos.show', compact('video'));
     }
 
     /**
@@ -74,7 +77,7 @@ class VideoController extends Controller
     public function edit(Video $video)
     {
 
-        if($video->user->id !== Auth::user()->id){
+        if ($video->user->id !== Auth::user()->id) {
             throw new NotFoundHttpException();
         }
         return view('videos.edit', compact('video'));
@@ -89,7 +92,7 @@ class VideoController extends Controller
      */
     public function update(UpdateVideoRequest $request, Video $video)
     {
-        if($video->user->id !== Auth::user()->id){
+        if ($video->user->id !== Auth::user()->id) {
             throw new NotFoundHttpException();
         }
         $video->fill($request->validated());
@@ -106,7 +109,7 @@ class VideoController extends Controller
      */
     public function destroy(Video $video)
     {
-        if($video->user->id !== Auth::user()->id){
+        if ($video->user->id !== Auth::user()->id) {
             throw new NotFoundHttpException();
         }
         $video->delete();

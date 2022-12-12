@@ -11,36 +11,45 @@ class Video extends Model
 {
     use HasFactory;
     protected $fillable = ['title', 'description', 'path', 'duration', 'thumbnail'];
-// old version
-//    public function getSnippetAttribute(){
-//        return substr($this->description,0,100);
-//    }
+    // old version
+    //    public function getSnippetAttribute(){
+    //        return substr($this->description,0,100);
+    //    }
 
-    public function snippet():Attribute {
-        return Attribute::get(function (){
-            return substr($this->description,0,100);
+    public function snippet(): Attribute
+    {
+        return Attribute::get(function () {
+            return substr($this->description, 0, 100);
         });
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
-    public function likes(){
+    public function likes()
+    {
         return $this->hasMany(Like::class);
     }
 
-    public function authHasLiked(): Attribute {
-        return Attribute::get(function (){
-            return $this->likes()->where('user_id', Auth::user()->id)->exists();
+    public function authHasLiked(): Attribute
+    {
+        return Attribute::get(function () {
+            if (Auth::check()) {
+                return $this->likes()->where('user_id', Auth::user()->id)->exists();
+            }
+            return false;
         });
     }
 
-    public function tags(){
+    public function tags()
+    {
         return $this->belongsToMany(Tag::class);
     }
 }
